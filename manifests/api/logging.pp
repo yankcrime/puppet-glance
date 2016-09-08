@@ -99,8 +99,8 @@ class glance::api::logging(
   $use_syslog                    = $::os_service_default,
   $use_stderr                    = $::os_service_default,
   $log_facility                  = $::os_service_default,
-  $log_dir                       = $::os_service_default,
-  $log_file                      = $::os_service_default,
+  $log_dir                       = '/var/log/glance',
+  $log_file                      = 'glance-api.log',
   $debug                         = $::os_service_default,
   $logging_context_format_string = $::os_service_default,
   $logging_default_format_string = $::os_service_default,
@@ -125,7 +125,12 @@ class glance::api::logging(
   $use_stderr_real = pick($::glance::api::use_stderr,$use_stderr)
   $log_facility_real = pick($::glance::api::log_facility,$log_facility)
   $log_dir_real = pick($::glance::api::log_dir,$log_dir)
-  $log_file_real = pick($::glance::api::log_file,$log_file)
+  if $log_file == false {
+    $log_file_real = $::os_service_default
+  }
+  else {
+    $log_file_real = pick($::glance::api::log_file,$log_file)
+  }
   $debug_real = pick($::glance::api::debug,$debug)
 
   if $verbose {
